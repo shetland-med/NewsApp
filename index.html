@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Qiita ニュースポータル</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <style>
+        body { padding-top: 20px; }
+        .header { padding-bottom: 10px; border-bottom: 1px solid #eee; background-color:rgb(180, 180, 180);}
+        h3 { padding-top: 20px; }
+        .clickable, .news-link {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+        .news-section, .selected-news-section {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .news-item {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .news-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .news-category {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .news-date {
+            font-size: 14px;
+            color: grey;
+        }
+        .news-app {
+            font-size: 14px;
+            color: black;
+            margin-top: 5px;
+            padding-left: 20px;
+        }
+        .news-title {
+            margin-top: 5px;
+            padding-left: 20px;
+        }
+        .centered-title {
+            text-align: center;
+            width: 100%;
+        }
+        .news-registration {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+        <div class="header">
+            <h2>XXXポータルサイト</h2>
+        </div>
+    <div id="app" class="container">
+
+        <div class="filter-area">
+            <button class="btn btn-info" @click="toggleModal">フィルタ</button>
+            <span v-if="selectedApps.length">{{ selectedApps.join(', ') }}</span>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="news-section">
+                    <h3>新着ニュース</h3>
+                    <p class="clickable" @click="selectCategory('お知らせ')">お知らせ ({{ countNewsByCategory('お知らせ') }})</p>
+                    <p class="clickable" @click="selectCategory('メンテナンス')">メンテナンス ({{ countNewsByCategory('メンテナンス') }})</p>
+                    <h3>過去のニュース</h3>
+                    <div v-for="year in years" :key="year">
+                        <p class="clickable" @click="selectYear(year)">{{ year }}年 ({{ countNewsByYear(year) }})</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="selected-news-section">
+                    <h3 class="centered-title">ニュース一覧</h3>
+                    <div v-for="news in selectedNews" :key="news.id" class="news-item">
+                        <div class="news-details">
+                            <span class="news-category">{{ news.category }}</span>
+                            <span class="news-date">{{ news.registration }}</span>
+                        </div>
+                        <div class="news-app">{{ news.app }}</div>
+                        <div class="news-title">
+                            <a :href="'https://' + news.newsPath + '/search?q=' + encodeURIComponent(news.title)" target="_blank" class="news-link">{{ news.title }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ポップアップ検索 -->
+        <div class="modal" tabindex="-1" style="display: block;" v-show="showModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">アプリ名によるニュース検索</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="app in apps" :key="app.name">
+                            <input type="checkbox" v-model="selectedApps" :value="app.name"> {{ app.name }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="searchNewsByApps">検索</button>
+                        <button type="button" the class="btn btn-secondary" @click="cancelSearch">キャンセル</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
