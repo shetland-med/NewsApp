@@ -70,7 +70,7 @@
 
         <div class="filter-area">
             <button class="btn btn-info" @click="toggleModal">フィルタ</button>
-            <span class="filter-display" v-if="displayApps">{{ displayApps }}</span>
+            <span class="filter-display" v-if="displayApps">${ displayApps }</span>
         </div>
 
         <div class="row mt-3">
@@ -78,11 +78,11 @@
                 <div class="news-section">
                     <h3>新着ニュース</h3>
                     <p v-for="category in categories" :key="category.name" class="clickable" @click="selectCategory(category.name)" v-if="category.count > 0">
-                        {{ category.name }} ({{ category.count }})
+                        ${ category.name } (${ category.count })
                     </p>
                     <h3>過去のニュース</h3>
                     <div v-for="year in years" :key="year.year" v-if="year.count > 0">
-                        <p class="clickable" @click="selectYear(year.year)">{{ year.year }}年 ({{ year.count }})</p>
+                        <p class="clickable" @click="selectYear(year.year)">${ year.year }年 (${ year.count })</p>
                     </div>
                 </div>
             </div>
@@ -92,12 +92,12 @@
                     <h3 class="centered-title">ニュース一覧</h3>
                     <div v-for="news in selectedNews" :key="news.id" class="news-item">
                         <div class="news-details">
-                            <span class="news-category">{{ news.category }}</span>
-                            <span class="news-date">{{ news.registration }}</span>
+                            <span class="news-category">${ news.category }</span>
+                            <span class="news-date">${ news.registration }</span>
                         </div>
-                        <div class="news-app">{{ news.app }}</div>
+                        <div class="news-app">${ news.app }</div>
                         <div class="news-title">
-                            <a :href="'https://' + news.newsPath + '/search?q=' + encodeURIComponent(news.title)" target="_blank" class="news-link">{{ news.title }}</a>
+                            <a :href="'https://' + news.newsPath + '/search?q=' + encodeURIComponent(news.title)" target="_blank" class="news-link">${ news.title }</a>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                     </div>
                     <div class="modal-body">
                         <div v-for="app in apps" :key="app.name">
-                            <input type="checkbox" v-model="selectedApps" :value="app.name"> {{ app.name }}
+                            <input type="checkbox" v-model="selectedApps" :value="app.name"> ${ app.name }
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -121,10 +121,13 @@
                         <button type="button" class="btn btn-secondary" @click="cancelSearch">キャンセル</button>
                     </div>
                 </div>
-            </div
+            </div>
         </div>
     </div>
+    <script type="application/json" id="news-data">
+        {{ news_data | tojson | safe }}
+    </script>
 
-    <script src="script.js"></script>
+    <script src="/static/js/script.js"></script>
 </body>
 </html>
