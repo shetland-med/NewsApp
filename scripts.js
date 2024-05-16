@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.selectedNews = [...this.previous_newsData];
         },
         methods: {
+            //カテゴリ別に件数をカウント
             updateCategoryCounts() {
                 var categories = new Set(this.newsData.map(news => news[3]));
                 this.categories = Array.from(categories).map(category => ({
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     count: this.newsData.filter(news => news[3] === category).length
                 }));
             },
+            //年度別に件数をカウント
             updateYearCounts() {
                 var years = new Set(this.previous_newsData.map(news => news[6]));
                 this.years = Array.from(years).map(year => ({
@@ -44,13 +46,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     count: this.previous_newsData.filter(news => news[6] === year).length
                 })).sort((a, b) => b.year - a.year);
             },
-
+            //カテゴリをクリックした際に関連するニュースを一覧に表示する処理
             selectCategory(category) {
                 this.selectedNews = this.newsData.filter(news => news[3] === category);
             },
+            //年度をクリックした際に関連するニュースを一覧に表示する処理
             selectYear(year) {
                 this.selectedNews = this.previous_newsData.filter(news => news[6] === year);
             },
+            //日付順に並び替え
             sortByDate(data) {
                 data.sort((a, b) => {
                     const dateA = new Date(a[5].split('-').map(num => num.padStart(2, '0')).join('-'));
@@ -58,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return dateB - dateA;
                 });
             },
+            //フィルタ検索処理
             searchNewsByApps() {
                 const data = JSON.stringify(this.selectedApps);
                 fetch('http://localhost:5000/search', {
@@ -87,9 +92,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.showModal = false;
                 this.displayApps = this.selectedApps.join(', ');
             },
+            //フィルタ用ポップアップの非表示処理
             toggleModal() {
                 this.showModal = !this.showModal;
             },
+            //フィルタ用ポップアップのキャンセルボタン押下時の処理
             cancelSearch() {
                 this.showModal = false;
             }
