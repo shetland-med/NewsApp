@@ -58,7 +58,6 @@
         .filter-display {
             font-size: 16px;
             margin-left: 10px;
-            color: #007bff;
         }
     </style>
 </head>
@@ -90,14 +89,14 @@
             <div class="col-md-8">
                 <div class="selected-news-section">
                     <h3 class="centered-title">ニュース一覧</h3>
-                    <div v-for="news in selectedNews" :key="news.id" class="news-item">
+                    <div v-for="(news, index) in selectedNews" :key="index" class="news-item">
                         <div class="news-details">
-                            <span class="news-category">${ news.category }</span>
-                            <span class="news-date">${ news.registration }</span>
+                            <span class="news-category">${ news[3] }</span>
+                            <span class="news-date">${ news[5] }</span>
                         </div>
-                        <div class="news-app">${ news.app }</div>
+                        <div class="news-app">${ news[0] }</div>
                         <div class="news-title">
-                            <a :href="'https://' + news.newsPath + '/search?q=' + encodeURIComponent(news.title)" target="_blank" class="news-link">${ news.title }</a>
+                            <a :href="'https://' + news[2] + '/search?q=' + encodeURIComponent(news[4])" target="_blank" class="news-link">${ news[4] }</a>
                         </div>
                     </div>
                 </div>
@@ -112,8 +111,8 @@
                         <h5 class="modal-title">アプリ名によるニュース検索</h5>
                     </div>
                     <div class="modal-body">
-                        <div v-for="app in apps" :key="app.name">
-                            <input type="checkbox" v-model="selectedApps" :value="app.name"> ${ app.name }
+                        <div v-for="app in appsData" :key="app.name">
+                            <input type="checkbox" v-model="selectedApps" :value="app[0]"> ${ app[0] }
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -124,10 +123,9 @@
             </div>
         </div>
     </div>
-    <script type="application/json" id="news-data">
-        {{ news_data | tojson | safe }}
-    </script>
-
-    <script src="/static/js/script.js"></script>
+    <script type="application/json" id="news-data">{{ news_data | tojson | safe }}</script>
+    <script type="application/json" id="app-data">{{ apps_data | tojson | safe }}</script>
+    <script type="application/json" id="previous-data">{{ previous_news_data | tojson | safe }}</script>
+    <script src="static/js/script.js"></script>
 </body>
 </html>
